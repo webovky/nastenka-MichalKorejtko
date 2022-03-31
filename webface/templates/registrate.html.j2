@@ -1,0 +1,17 @@
+{% extends 'base.html.j2' %}
+
+{%block title%}Registrace{%endblock%}
+
+{% block obsah %}
+
+<h1>Registrate</h1>
+
+<form method="post">
+    <p>nick: <input type="text" name="nick"></p>
+    <p>heslo:<input type="password" name="passwd1"></p>
+    <p>heslo:<input type="password" name="passwd2"></p>
+    <p><button type="submit"> Vytvoř mi účet </button></p>
+</form>
+
+
+{% endblock obsah %}

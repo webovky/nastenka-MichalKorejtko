@@ -21,28 +21,27 @@
   <nav>
   <p><img src="{{ url_for('static', filename='flask-icon.png') }}" /></p>
   <ul>
-    <li><a href="{{ url_for('index') }}">Index</a></li>
-    <li><a href="{{ url_for('info') }}">Info</a></li>
-    <li><a href="{{ url_for('abc') }}">ABC</a></li>
+    <li><a href="{{ url_for('index') }}">Home</a></li>
+    <li><a href="{{ url_for('login') }}">Login</a></li>
+    <li><a href="{{ url_for('registrate') }}">Registrate</a></li>
   </ul></nav>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <p style="background-color:white; font-size:130%; margin: 4em">{{message}}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
 {% block obsah %}
 
-{#{% filter markdown %}#}
-
-# Flask
-
-Startovací šablona pro webový framework Flask.
-
-![Flaštička]({{ url_for('static', filename='flask.png') }})
-![Flaštičky]({{ url_for('static', filename='flasks.png') }})
-
-{#{% endfilter %}#}
+<h1> Nástěnka</h1>
 
 
 
 {% endblock obsah %}
+
 
 <footer>
 {#{% filter markdown %}#}
