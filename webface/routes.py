@@ -38,7 +38,7 @@ def login_post():
     passwd=request.form.get('passwd1')
     if nick and passwd:
         with sqlite3.connect(dbfile) as con:
-            tabulka=con.execute("SELECT passwd FROM uzivatel WHERE nick=?",[nick])
+            tabulka=list(con.execute("SELECT passwd FROM uzivatel WHERE nick=?",[nick]))
         if tabulka and check_password_hash(tabulka[0][0], passwd):
             flash("Anoo")
         else:
