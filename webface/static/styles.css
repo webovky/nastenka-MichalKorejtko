@@ -59,5 +59,13 @@ footer {
     background-color: lightblue;
 }
 
+dt {
+    background-color: orange;
+    border: black solid 1px;
+}
+
+dd {
+    background-color: white;
+}
 
 /*# sourceMappingURL=styles.css.map */

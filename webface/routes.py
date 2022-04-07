@@ -25,7 +25,13 @@ def prihlasit(function):
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("base.html.j2")
+    if "nick" in session:
+        with sqlite3.connect(dbfile) as con:
+            tabulka=list(con.execute("SELECT nick,text,id FROM prispevek"))
+        return render_template("base.html.j2", tabulka=tabulka)
+    else:
+        flash("Musíš se přihlásit!")
+        return redirect(url_for("login"))
 
 
 @app.route("/login/")
@@ -41,10 +47,15 @@ def login_post():
             tabulka=list(con.execute("SELECT passwd FROM uzivatel WHERE nick=?",[nick]))
         if tabulka and check_password_hash(tabulka[0][0], passwd):
             flash("Anoo")
+            session["nick"]=nick
         else:
             flash("Nee")
     return redirect(url_for("index"))
 
+@app.route("/logout/")
+def logout():
+    session.pop("nick",None)
+    return redirect(url_for("index"))
 
 @app.route("/registrate/")
 def registrate():
@@ -57,7 +68,7 @@ def registrate_post():
     passwd1=request.form.get('passwd1')
     passwd2=request.form.get('passwd2')
     if nick and passwd1 and passwd1==passwd2:
-        hashpasswd=generate_password_hash('passwd1')
+        hashpasswd=generate_password_hash(passwd1)
         with sqlite3.connect(dbfile) as con:
             try:
                 con.execute('INSERT INTO uzivatel (nick,passwd) VALUES(?,?)',[nick, hashpasswd])
@@ -69,12 +80,17 @@ def registrate_post():
         return redirect(url_for("registrate"))
     return redirect(url_for("index"))
 
+
+@app.route('/insert/', methods=["POST"])
+def insert():
+    if "nick" in session:
+        prispevek=request.form.get("prispevek")
+        with sqlite3.connect(dbfile) as con:
+            con.execute('INSERT INTO prispevek (text,nick) VALUES (?, ?)',[prispevek, session["nick"]])
+    else:
+        abort(403)
+    return redirect(url_for('index'))
+
 @app.route("/text/")
 def text():
-    return """
-
-<h1>Text</h1>
-
-<p>toto je text</p>
-
-"""
+    return 
